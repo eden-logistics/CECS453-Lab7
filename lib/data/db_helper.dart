@@ -17,12 +17,14 @@ class DBHelper {
 
   Future<Database> _initDb() async {
     String path = join(await getDatabasesPath(), 'notes.db');
+    // christ this took too long
+    // await deleteDatabase(path);
     return await openDatabase(path, version: 1, onCreate: _onCreate);
   }
 
   void _onCreate(Database db, int version) async {
     await db.execute(
-      'CREATE TABLE notes (id INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT, description TEXT)',
+      'CREATE TABLE notes (id INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT, description TEXT, date TEXT)',
     );
   }
 

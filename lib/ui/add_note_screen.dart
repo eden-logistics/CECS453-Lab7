@@ -13,6 +13,7 @@ class AddNoteScreen extends StatefulWidget {
 
 class _AddNoteScreenState extends State<AddNoteScreen> {
   final _formKey = GlobalKey<FormState>();
+
   final TextEditingController _titleController = TextEditingController();
   final TextEditingController _descriptionController = TextEditingController();
 
@@ -22,6 +23,7 @@ class _AddNoteScreenState extends State<AddNoteScreen> {
         id: widget.note?.id,
         title: _titleController.text,
         description: _descriptionController.text,
+        dateTime: widget.note == null ? DateTime.now() : widget.note?.dateTime,
       );
 
       // Use the provider to save the note
@@ -35,8 +37,19 @@ class _AddNoteScreenState extends State<AddNoteScreen> {
     }
   }
 
+  // add the current note's title and description to the controllers so you don't have to put everything in every time
+  void _applyCurrentNoteInfo(Note note) {
+    _titleController.text = note.title;
+    _descriptionController.text = note.description;
+  }
+
   @override
   Widget build(BuildContext context) {
+    // if the note exists already, apply its title and description to the controllers
+    if (widget.note != null) {
+      _applyCurrentNoteInfo(widget.note!);
+    }
+
     return Scaffold(
       appBar: AppBar(
         title: Text(
@@ -70,6 +83,7 @@ class _AddNoteScreenState extends State<AddNoteScreen> {
             TextFormField(
               controller: _descriptionController,
               decoration: InputDecoration(
+                contentPadding: EdgeInsets.all(10),
                 // border: OutlineInputBorder(),
               ),
               keyboardType: TextInputType.multiline,
